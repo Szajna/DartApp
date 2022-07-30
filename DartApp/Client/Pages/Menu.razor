@@ -1,0 +1,61 @@
+﻿@page "/DartMenu"
+@using DartApp.Shared
+@inject GameStateContainer gameState;
+@inject NavigationManager navigationManager;
+
+<h3>Menu</h3>
+
+<EditForm Model="gameState" OnValidSubmit="OnValidSubmit">
+
+    <div class="container" style="max-width: 700px;">
+
+        <div class="text-center" style="margin: 20px 0px 20px 0px;">
+            <span class="text-secondary">Add players</span>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-12">
+                @foreach (var player in gameState.Players)
+                {
+                    <div id="inputFormRow">
+                        <div class="input-group mb-3">
+                            <input type="text" class="form-control m-input" placeholder="Enter player name" autocomplete="off" @bind-value="player.Name">
+                            <div class="input-group-append">
+                                <button id="removeRow" type="button" class="btn btn-danger" @onclick="() => RemovePlayer(player)">Remove</button>
+                            </div>
+                        </div>
+                    </div>
+                }
+
+                <button id="addRow" type="button" class="btn btn-info" @onclick="AddPlayer">Add Player</button>
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary btn-lg btn-block">Start</button>
+    </div>
+</EditForm>
+
+@code {
+
+    public void AddPlayer()
+    {
+        gameState.Players.Add(new Player());
+    }
+
+    public void RemovePlayer(Player player)
+    {
+        gameState.Players.Remove(player);
+    }
+
+    public void OnValidSubmit()
+    {
+        if (gameState.Players.Count > 1)
+        {
+            navigationManager.NavigateTo("DartGame");
+        }
+        else
+        {
+            //TODO: Dodaj ładny komunikat na stronie z błedem
+            Console.WriteLine("Need more players");
+        }
+    }
+}
