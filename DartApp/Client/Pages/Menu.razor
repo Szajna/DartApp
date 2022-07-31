@@ -2,6 +2,7 @@
 @using DartApp.Shared
 @inject GameStateContainer gameState;
 @inject NavigationManager navigationManager;
+@inject IJSRuntime JSRuntime
 
 <h3>Menu</h3>
 
@@ -46,7 +47,7 @@
         gameState.Players.Remove(player);
     }
 
-    public void OnValidSubmit()
+    public async void OnValidSubmit()
     {
         if (gameState.Players.Count > 1)
         {
@@ -54,8 +55,7 @@
         }
         else
         {
-            //TODO: Dodaj ładny komunikat na stronie z błedem
-            Console.WriteLine("Need more players");
+            await JSRuntime.InvokeVoidAsync("alert", "Need more players!");
         }
     }
 }

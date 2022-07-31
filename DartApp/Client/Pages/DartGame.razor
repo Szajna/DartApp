@@ -3,9 +3,24 @@
 @inject GameStateContainer gameState;
 
 <PageTitle>Dart game</PageTitle>
-
-
+<div class="row">
+    <div class="col-md-auto">
+        duopa
+    </div>
+@for (int i = 0; i < gameState.Players.Count; i++)
+{
+    <div class="col">
+        <h2>@gameState.Players.ElementAt(i).Name</h2>
+        <h4></h4>
+    </div>
+}
+</div>
 
 @code {
+
+    public int GetCurrentScore(int i)
+    {
+        return 0; //gameState.Players.ElementAt(i).Score
+    }
 
 }

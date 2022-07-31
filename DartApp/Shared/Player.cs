@@ -10,6 +10,9 @@ namespace DartApp.Shared
     {
         public string Id { get; private set; }
         public string Name { get; set; }
+        public int Score { get; set; }
+        public int AvgScore { get; set; }
+        public int TopScore { get; set; }
 
         public Player()
         {
