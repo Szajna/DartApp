@@ -1,26 +1,53 @@
 ﻿@page "/DartGame"
 @using DartApp.Shared;
 @inject GameStateContainer gameState;
+@inject NavigationManager navigationManager;
 
 <PageTitle>Dart game</PageTitle>
 <div class="row">
     <div class="col-md-auto">
-        duopa
+        <input type="number" class="form-control m-input" placeholder="Enter your score" @onkeyup="@Enter" @bind=@inputScore />
+        <button id="ThrowResult" type="button" class="btn btn-success" style="width:100%" @onclick="() => AddScore()">Add Score</button>
+        <h2>Dart Count</h2>
+        <h2></h2>
     </div>
-@for (int i = 0; i < gameState.Players.Count; i++)
-{
-    <div class="col">
-        <h2>@gameState.Players.ElementAt(i).Name</h2>
-        <h4></h4>
-    </div>
-}
+    <div class="col-md-auto" style="border-right: 4px solid black;height:800px"></div>
+    @for (int i = 0; i < gameState.Players.Count; i++)
+    {
+        <div class="col">
+            <h1 class="text-center">@gameState.Players.ElementAt(i).Name</h1>
+            <div class="row-md-auto" style="border-top: 2px solid black"></div>
+            <h1 class="text-center">@gameState.Players.ElementAt(i).Score</h1>
+        </div>
+        <div class="col-md-auto" style="border-right: 4px solid black;height:auto"></div>
+    }
 </div>
 
 @code {
 
+    public int? inputScore;
+
+    public void Enter(KeyboardEventArgs e)
+    {
+        if (e.Code == "Enter" || e.Code == "NumpadEnter")
+        {
+            AddScore();
+        }
+    }
+    public void AddScore()
+    {
+        gameState.Players.Select(p => p.Score = inputScore == null ? p.Score - 0 : p.Score - inputScore.Value).ToList();
+        this.inputScore = null;
+        navigationManager.NavigateTo("DartGame");
+    }
+
     public int GetCurrentScore(int i)
     {
-        return 0; //gameState.Players.ElementAt(i).Score
+        return 0;
+    }
+    public void AddDart()
+    {
+        //gameState.Darts.Add(gameState.Darts.ElementAt()
     }
 
 }

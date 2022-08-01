@@ -13,7 +13,7 @@ namespace DartApp.Shared
         public int Score { get; set; }
         public int AvgScore { get; set; }
         public int TopScore { get; set; }
-
+        public List<int> ScoreHistory { get; set; } = new List<int>();
         public Player()
         {
             Id = new Guid().ToString();
