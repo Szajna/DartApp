@@ -20,5 +20,16 @@ namespace DartApp.Shared
             AvgScore = 0;
             TopScore = 0;
         }
+
+        public void AddScore(int? newScore)
+        {
+            Score = Score - newScore ?? Score;
+            ScoreHistory.Add(newScore ?? 0);
+            AvgScore = Math.Round(ScoreHistory.Average(), 2);
+            if (TopScore < newScore)
+            {
+                TopScore = newScore.Value;
+            }
+        }
     }
 }

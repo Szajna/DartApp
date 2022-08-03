@@ -37,10 +37,7 @@
             </div>
             <div class="row-md-auto" style="border-top: 2px solid black"></div>
             <div class="row">
-                @*@foreach (var score in player.ScoreHistory.Reverse())
-                    {
-                    <h1>@score</h1>
-                    }*@
+
                 @for (int i = player.ScoreHistory.Count() - 1; i >= 0; i--)
                 {
                     <h1>@player.ScoreHistory[i]</h1>
@@ -72,21 +69,12 @@
         }
         else
         {
-            gameState.Players.ElementAt(currentTurn).Score = gameState.Players.ElementAt(currentTurn).Score - inputScore ?? gameState.Players.ElementAt(currentTurn).Score;
-            gameState.Players.ElementAt(currentTurn).ScoreHistory.Add(inputScore ?? 0);
-            gameState.Players.ElementAt(currentTurn).AvgScore = Math.Round(gameState.Players.ElementAt(currentTurn).ScoreHistory.Average(), 2);
-
-            if (gameState.Players.ElementAt(currentTurn).TopScore < inputScore)
-            {
-                gameState.Players.ElementAt(currentTurn).TopScore = inputScore.Value;
-            }
+            gameState.Players.ElementAt(currentTurn).AddScore(inputScore);
             currentTurn++;
-            //gameState.Players.Select(p => p.Score = inputScore == null ? p.Score - 0 : p.Score - inputScore.Value).ToList();
-
         }
         this.inputScore = null;
         CheckTurn();
-        navigationManager.NavigateTo("DartGame");
+        //navigationManager.NavigateTo("DartGame");
     }
     public async void WrongScoreMessage()
     {
