@@ -2,6 +2,7 @@
 @using DartApp.Shared;
 @inject GameStateContainer gameState;
 @inject NavigationManager navigationManager;
+@inject IJSRuntime JSRuntime
 
 <PageTitle>Dart game</PageTitle>
 <div class="row">
@@ -9,23 +10,52 @@
         <input type="number" class="form-control m-input" placeholder="Enter your score" @onkeyup="@Enter" @bind=@inputScore />
         <button id="ThrowResult" type="button" class="btn btn-success" style="width:100%" @onclick="() => AddScore()">Add Score</button>
         <h2>Dart Count</h2>
-        <h2></h2>
+        @for (int i = gameState.Players.ElementAt(0).ScoreHistory.Count(); i-- > 0;)
+        {
+            <div class="row">
+                <h1>@(i*3+3)</h1>
+            </div>
+            <div class="row-md-auto" style="border-top: 2px solid black"></div>
+        }
     </div>
-    <div class="col-md-auto" style="border-right: 4px solid black;height:800px"></div>
-    @for (int i = 0; i < gameState.Players.Count; i++)
+    <div class="col-md-auto" style="background-color: black; height:800px"></div>
+    @foreach (var player in gameState.Players)
     {
         <div class="col">
-            <h1 class="text-center">@gameState.Players.ElementAt(i).Name</h1>
+            <h1 class="text-center">@player.Name</h1>
             <div class="row-md-auto" style="border-top: 2px solid black"></div>
-            <h1 class="text-center">@gameState.Players.ElementAt(i).Score</h1>
+            <div class="row">
+                <div class="col">
+                    <h3 class="text-center">Top Score: @player.TopScore</h3>
+                </div>
+                <div class="col-md-auto">
+                    <h1 class="text-center">@player.Score</h1>
+                </div>
+                <div class="col">
+                    <h3 class="text-center">Avg. Score: @player.AvgScore</h3>
+                </div>
+            </div>
+            <div class="row-md-auto" style="border-top: 2px solid black"></div>
+            <div class="row">
+                @*@foreach (var score in player.ScoreHistory.Reverse())
+                    {
+                    <h1>@score</h1>
+                    }*@
+                @for (int i = player.ScoreHistory.Count() - 1; i >= 0; i--)
+                {
+                    <h1>@player.ScoreHistory[i]</h1>
+                    <div class="row-md-auto" style="border-top: 2px solid black"></div>
+                }
+            </div>
         </div>
-        <div class="col-md-auto" style="border-right: 4px solid black;height:auto"></div>
+        <div class="col-md-auto" style="background-color: black; height:auto"></div>
     }
 </div>
 
 @code {
 
     public int? inputScore;
+    public int currentTurn = 0;
 
     public void Enter(KeyboardEventArgs e)
     {
@@ -36,18 +66,37 @@
     }
     public void AddScore()
     {
-        gameState.Players.Select(p => p.Score = inputScore == null ? p.Score - 0 : p.Score - inputScore.Value).ToList();
+        if (inputScore > 180 || inputScore < 0)
+        {
+            WrongScoreMessage();
+        }
+        else
+        {
+            gameState.Players.ElementAt(currentTurn).Score = gameState.Players.ElementAt(currentTurn).Score - inputScore ?? gameState.Players.ElementAt(currentTurn).Score;
+            gameState.Players.ElementAt(currentTurn).ScoreHistory.Add(inputScore ?? 0);
+            gameState.Players.ElementAt(currentTurn).AvgScore = Math.Round(gameState.Players.ElementAt(currentTurn).ScoreHistory.Average(), 2);
+
+            if (gameState.Players.ElementAt(currentTurn).TopScore < inputScore)
+            {
+                gameState.Players.ElementAt(currentTurn).TopScore = inputScore.Value;
+            }
+            currentTurn++;
+            //gameState.Players.Select(p => p.Score = inputScore == null ? p.Score - 0 : p.Score - inputScore.Value).ToList();
+
+        }
         this.inputScore = null;
+        CheckTurn();
         navigationManager.NavigateTo("DartGame");
     }
-
-    public int GetCurrentScore(int i)
+    public async void WrongScoreMessage()
     {
-        return 0;
+        await JSRuntime.InvokeVoidAsync("alert", "Wrong Score!");
     }
-    public void AddDart()
+    public void CheckTurn()
     {
-        //gameState.Darts.Add(gameState.Darts.ElementAt()
+        if (currentTurn == gameState.TurnCount)
+        {
+            currentTurn = 0;
+        }
     }
-
 }

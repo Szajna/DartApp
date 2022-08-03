@@ -52,6 +52,7 @@
         if (gameState.Players.Count > 1)
         {
             AddStartScore();
+            gameState.TurnCount = gameState.Players.Count();
             navigationManager.NavigateTo("DartGame");
         }
         else
