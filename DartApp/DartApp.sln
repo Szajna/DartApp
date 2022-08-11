@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.1.32210.238
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DartApp.Server", "Server\DartApp.Server.csproj", "{66C3A4B1-3087-4A10-B7B0-DF303B47F293}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DartApp.Server", "Server\DartApp.Server.csproj", "{66C3A4B1-3087-4A10-B7B0-DF303B47F293}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DartApp.Client", "Client\DartApp.Client.csproj", "{21011A3D-93E8-437A-B44A-D6C915A970F2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DartApp.Client", "Client\DartApp.Client.csproj", "{21011A3D-93E8-437A-B44A-D6C915A970F2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DartApp.Shared", "Shared\DartApp.Shared.csproj", "{74D5FF2B-817B-4574-83A3-1E7DF712AA32}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DartApp.Shared", "Shared\DartApp.Shared.csproj", "{74D5FF2B-817B-4574-83A3-1E7DF712AA32}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

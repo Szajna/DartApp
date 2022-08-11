@@ -1,5 +1,6 @@
 ﻿@page "/DartMenu"
 @using DartApp.Shared
+@using DartApp.Client.Components
 @inject GameStateContainer gameState;
 @inject NavigationManager navigationManager;
 @inject IJSRuntime JSRuntime
@@ -53,19 +54,30 @@
         gameState.Players.Remove(player);
     }
 
-    public async void OnValidSubmit()
+    public void OnValidSubmit()
     {
         if (gameState.Players.Count > 1)
         {
             AddStartScore();
             gameState.TurnCount = gameState.Players.Count();
+
+            foreach (var item in gameState.Players)
+            {
+                item.Name = item.Name ?? ("Player " + (gameState.Players.IndexOf(item) + 1));
+            }
             navigationManager.NavigateTo("DartGame");
         }
         else
         {
-            await JSRuntime.InvokeVoidAsync("alert", "Need more players!");
+            TooFewPlayersMessage();
         }
     }
+
+    public async void TooFewPlayersMessage()
+    {
+        await JSRuntime.InvokeVoidAsync("alert", "Need more players!");
+    }
+
     public void AddStartScore()
     {
         gameState.Players.Select(p => p.Score = 501).ToList();

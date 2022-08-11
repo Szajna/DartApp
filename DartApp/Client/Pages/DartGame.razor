@@ -38,7 +38,7 @@
             <div class="row-md-auto" style="border-top: 2px solid black"></div>
             <div class="row">
 
-                @for (int i = player.ScoreHistory.Count() - 1; i >= 0; i--)
+                @for (int i = player.ScoreHistory.Count() - 1; i-- > 0;)
                 {
                     <h1>@player.ScoreHistory[i]</h1>
                     <div class="row-md-auto" style="border-top: 2px solid black"></div>
@@ -48,6 +48,8 @@
         <div class="col-md-auto" style="background-color: black; height:auto"></div>
     }
 </div>
+
+@*<DartApp.Client.Components.FinalDartDialog Title="You won!" Text="How many double throws?"></DartApp.Client.Components.FinalDartDialog>*@
 
 @code {
 
@@ -69,12 +71,18 @@
         }
         else
         {
-            gameState.Players.ElementAt(currentTurn).AddScore(inputScore);
+            if (gameState.Players.ElementAt(currentTurn).Score == inputScore)
+            {
+
+            }
+            else
+            {
+                gameState.Players.ElementAt(currentTurn).AddScore(inputScore);
+            }
             currentTurn++;
         }
         this.inputScore = null;
         CheckTurn();
-        //navigationManager.NavigateTo("DartGame");
     }
     public async void WrongScoreMessage()
     {
