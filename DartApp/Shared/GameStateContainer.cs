@@ -11,12 +11,13 @@ namespace DartApp.Shared
         public string GameName { get; set; }
         public List<Player> Players { get; set; } = new List<Player>();
         public int TurnCount { get; set; }
-
+        public int DartCount { get; set; }
         public void ClearGameState()
         {
             Players.Clear();
             GameName = string.Empty;
             TurnCount = 0;
+            DartCount = 0;
         }
     }
 }

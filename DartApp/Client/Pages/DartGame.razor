@@ -10,10 +10,10 @@
         <input type="number" class="form-control m-input" placeholder="Enter your score" @onkeyup="@Enter" @bind=@inputScore />
         <button id="ThrowResult" type="button" class="btn btn-success" style="width:100%" @onclick="() => AddScore()">Add Score</button>
         <h2>Dart Count</h2>
-        @for (int i = gameState.Players.ElementAt(0).ScoreHistory.Count(); i-- > 0;)
+        @for (int i = gameState.DartCount; i-- > 0;)
         {
             <div class="row">
-                <h1>@(i*3+3)</h1>
+                <h1 class="text-center">@(i*3+3)</h1>
             </div>
             <div class="row-md-auto" style="border-top: 2px solid black"></div>
         }
@@ -35,12 +35,12 @@
                     <h3 class="text-center">Avg. Score: @player.AvgScore</h3>
                 </div>
             </div>
-            <div class="row-md-auto" style="border-top: 2px solid black"></div>
+            <div class="row-md-auto" style="background-color: black; height:7px; border-top: 2px solid black"></div>
             <div class="row">
 
-                @for (int i = player.ScoreHistory.Count() - 1; i-- > 0;)
+                @for (int i = player.ScoreHistory.Count(); i-- > 0;)
                 {
-                    <h1>@player.ScoreHistory[i]</h1>
+                    <h1 class="text-center">@player.ScoreHistory[i]</h1>
                     <div class="row-md-auto" style="border-top: 2px solid black"></div>
                 }
             </div>
@@ -48,10 +48,26 @@
         <div class="col-md-auto" style="background-color: black; height:auto"></div>
     }
 </div>
-
-@*<DartApp.Client.Components.FinalDartDialog Title="You won!" Text="How many double throws?"></DartApp.Client.Components.FinalDartDialog>*@
+@if (FinalDartDialogOpen)
+{
+    <DartApp.Client.Components.FinalDartDialog Title="You won!" Text="How many double attempts?" OnClose="@OnFinalDartDialogClose"></DartApp.Client.Components.FinalDartDialog>
+}
 
 @code {
+
+    public bool FinalDartDialogOpen { get; set; }
+
+    private void OnFinalDartDialogClose(bool accepted)
+    {
+        FinalDartDialogOpen = false;
+        StateHasChanged();
+    }
+
+    private void OpenFinalDartDialog()
+    {
+        FinalDartDialogOpen = true;
+        StateHasChanged();
+    }
 
     public int? inputScore;
     public int currentTurn = 0;
@@ -71,16 +87,15 @@
         }
         else
         {
+            gameState.Players.ElementAt(currentTurn).AddScore(inputScore);
+
             if (gameState.Players.ElementAt(currentTurn).Score == inputScore)
             {
-
+                OpenFinalDartDialog();
             }
-            else
-            {
-                gameState.Players.ElementAt(currentTurn).AddScore(inputScore);
-            }
-            currentTurn++;
         }
+
+
         this.inputScore = null;
         CheckTurn();
     }
@@ -90,6 +105,11 @@
     }
     public void CheckTurn()
     {
+        if (currentTurn == 0)
+        {
+            gameState.DartCount++;
+        }
+        currentTurn++;
         if (currentTurn == gameState.TurnCount)
         {
             currentTurn = 0;

@@ -26,7 +26,7 @@
     public string Title { get; set; }
     [Parameter]
     public string Text { get; set; }
-
+    [Parameter]
     public EventCallback<bool> OnClose { get; set; }
 
     private Task FinalDartCancel()
@@ -35,6 +35,7 @@
     }
     private Task FinalDartOk(int finalDart)
     {
+        gameState.DartCount = gameState.DartCount + finalDart;
         return OnClose.InvokeAsync(true);
     }
 }
